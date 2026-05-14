@@ -89,3 +89,23 @@ generar_reporte(Personaje, MisionID, Mensaje) :-
     mision(MisionID, Nombre, _, XP),
     conjugar_accion("ser", presente, tercera, singular, FormaVerbal),
     atomic_list_concat([Personaje, FormaVerbal, "capaz de completar", Nombre, "por", XP, "XP"], ' ', Mensaje).
+
+
+    % --- CONSULTAS DE VALIDACIÓN FINAL (Ejecutar en consola) ---
+
+% 1. Fusión de equipos y filtrado
+% ?- fusionar_equipo('Elara', 'Rin', Equipo), member(pocion, Equipo).
+% Equipo = [espada, escudo, pocion, varita, grimorio, pocion, amuleto] ; true
+
+% 2. Conjugación con backtracking
+%?- conjugar_accion("ser", T, P, N, C).
+% Devuelve todas las combinaciones válidas definidas en ser/4.
+
+% 3. Generación de reporte narrativo completo
+%?- generar_reporte('Elara', m2, Msg).
+% Msg = 'Elara es capaz de completar Cueva del Dragón por 120 XP'.
+
+% 4. Demostración de error controlado (Unificación vs Aritmética)
+%?- X = 10, X == 10.     true (ya instanciada)
+%?- Y == 10.             false (variable no instanciada, regla 2.2)
+%?- Z =:= 10.            ERROR: Arguments are not sufficiently instantiated (2.2)
