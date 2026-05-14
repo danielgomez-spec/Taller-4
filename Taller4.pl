@@ -54,3 +54,38 @@ es_balanceado(Personaje) :-
     personaje(Personaje, _, Vida),
     Vida =:= 100.           % =:= exige evaluación aritmética instanciada
 
+
+
+% --- PROCESAMIENTO DE LISTAS Y NLP ---
+
+% 1. Fusionar inventarios de dos personajes usando append/3 (2.3)
+fusionar_equipo(P1, P2, EquipoFusionado) :-
+    inventario(P1, L1),
+    inventario(P2, L2),
+    append(L1, L2, EquipoFusionado).
+
+% 2. Base de conjugación (Adaptación directa de conjugar_verbo/5 en 2.3)
+tiempo(presente). tiempo(pasado). tiempo(futuro).
+persona(primera). persona(segunda). persona(tercera).
+numero(singular). numero(plural).
+
+ser(presente, tercera, singular, "es").
+ser(pasado, tercera, singular, "fue").
+ser(futuro, tercera, singular, "será").
+ser(presente, primera, singular, "soy").
+ser(presente, primera, plural, "somos").
+
+% 3. Regla de inferencia con estructura condicional (2.3)
+conjugar_accion(Verbo, Tiempo, Persona, Numero, Conjugacion) :-
+    tiempo(Tiempo), persona(Persona), numero(Numero),
+    (  Verbo = "ser" ->
+       ser(Tiempo, Persona, Numero, R),
+       Conjugacion = R
+    ;  Conjugacion = Verbo ). % Si no es "ser", devuelve el infinitivo
+
+% 4. Generación de reporte narrativo
+generar_reporte(Personaje, MisionID, Mensaje) :-
+    puede_aceptar(Personaje, MisionID),
+    mision(MisionID, Nombre, _, XP),
+    conjugar_accion("ser", presente, tercera, singular, FormaVerbal),
+    atomic_list_concat([Personaje, FormaVerbal, "capaz de completar", Nombre, "por", XP, "XP"], ' ', Mensaje).
